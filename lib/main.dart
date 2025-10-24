@@ -1,122 +1,165 @@
-import 'package:flutter/material.dart';
+// ==========================================================
+// DART 1. GÜN CHALLENGE: TEMEL KILAVUZU
+// Konu: Temel Veri Tipleri, Değişkenler, Fonksiyonlar, Karar Yapıları.
+// ==========================================================
 
+// ----------------------------------------------------------
+// YARDIMCI FONKSİYONLAR (main() öncesinde, kodun temiz kalması için tanımlanır)
+// ----------------------------------------------------------
+
+// 1. Fonksiyon: Değer Döndürmeyen (void) Özet Fonksiyonu
+// Parametre: Fonksiyona dışarıdan gönderilen verilerdir.
+void lastikOzetiGoster(String ad, int omur, double sicaklik) {
+  print("\n--- Lastik Özet Raporu ---");
+  print("Analiz Edilen Lastik: $ad");
+  print("Kalan Ömür: ${omur}%");
+  print("Sıcaklık: ${sicaklik}°C");
+}
+
+// 2. Fonksiyon: Değer Döndüren (double) Hesaplama Fonksiyonu
+// Kural: double tipini kullandığımız için mutlaka return ile double değer dönmeli.
+double sicaklikFarkiHesapla(double mevcutSicaklik, double idealSicaklik) {
+  // abs(): Mutlak değeri alır, farkın negatif olmasını engeller.
+  return (mevcutSicaklik - idealSicaklik).abs();
+}
+
+// 3. Karar Yapısı (If-Else): Aralık Kontrolü
+void sicaklikUyarisiVer(double sicaklik) {
+  // If-Else, aralık kontrolü ve geniş ihtimaller için kullanılır.
+  if (sicaklik > 105.0) {
+    print("!!! KRİTİK: Yüksek Sıcaklık Limiti Aşıldı.");
+  } else if (sicaklik > 95.0) {
+    print("SARI SİNYAL: Sıcaklık Yüksek. Gözlem Gerekli.");
+  } else {
+    print("YEŞİL SİNYAL: Sıcaklık Normal Sınırlar İçinde.");
+  }
+}
+
+// 4. Karar Yapısı (Switch-Case): Kesin Değer Kontrolü
+void omurTavsiyesiVer(int kalanOmurYuzdesi) {
+  // Switch-Case, belirli ve sınırlı sayıdaki kesin değerler için temizdir.
+  switch (kalanOmurYuzdesi) {
+    case 10:
+      print("!!! ZORUNLU PİT: %10 Ömür Kaldı.");
+      break; // break, case eşleşince switch bloğunu sonlandırır.
+    case 50:
+      print("İDEAL ZAMAN: %50 Ömür Kaldı. Pit Düşünülebilir.");
+      break;
+    default:
+      // default: Hiçbir case eşleşmezse çalışır.
+      print("Özel Durum: Standart Takipteyiz. (%${kalanOmurYuzdesi})");
+  }
+}
+
+// ----------------------------------------------------------
+// ANA GİRİŞ NOKTASI (void main() - Program her zaman buradan başlar)
+// ----------------------------------------------------------
 void main() {
-  runApp(const MyApp());
+  // ==========================================================
+  // I. VERİ TİPLERİ VE DEĞİŞKEN TANIMLAMA
+  // ==========================================================
+
+  // A. TEMEL VERİ TİPLERİ (Type Safety)
+  String lastikAd = "Sağ Arka";
+  int mevcutOmur = 37;
+  double anlikSicaklik = 101.5;
+  bool islakZemin = false;
+
+  // B. ESNEK/SABİT DEĞİŞKENLER
+  var saniye = 0; // var: İlk atanan tipi (int) alır, sonradan değiştirilebilir.
+  final idealPilot =
+      "Lewis Hamilton"; // final: Değeri BİR KEZ atanır, DEĞİŞTİRİLEMEZ.
+  const MAKS_HIZ_KM =
+      350; // const: En katı sabit. Kod DERLENİRKEN bilinmelidir.
+
+  // ==========================================================
+  // II. EKRAN ÇIKTILARI (print())
+  // ==========================================================
+
+  print("--- DART TEMEL KODLAMA NOTLARI BAŞLANGIÇ ---");
+
+  // String Interpolation: Metin içine değişken yerleştirme.
+  print("Pilot: $idealPilot. Maksimum Hız: $MAKS_HIZ_KM km/s.");
+  print("Islak Zemin Durumu: $islakZemin.");
+
+  // ==========================================================
+  // III. FONKSİYON KULLANIMI VE ÇAĞRILARI
+  // ==========================================================
+
+  // 1. Değer Döndürmeyen Fonksiyon Çağrısı
+  lastikOzetiGoster(lastikAd, mevcutOmur, anlikSicaklik);
+
+  // 2. Değer Döndüren Fonksiyon Çağrısı (Sonucu bir değişkene atamalıyız)
+  double idealSicaklik = 95.0;
+  double fark = sicaklikFarkiHesapla(anlikSicaklik, idealSicaklik);
+
+  print("\nSICAKLIK HESAPLAMA SONUCU:");
+  print("İdeal sıcaklık ile mevcut sıcaklık arasındaki fark: ${fark} °C.");
+
+  // ==========================================================
+  // IV. KARAR YAPILARI TESTLERİ
+  // ==========================================================
+
+  // 1. If-Else Testi (Aralık Kontrolü)
+  print("\n--- IF-ELSE SİSTEMİ ÇALIŞIYOR ---");
+  sicaklikUyarisiVer(anlikSicaklik); // 101.5 => SARI SİNYAL çıkmalı.
+  sicaklikUyarisiVer(110.0); // KRİTİK çıkmalı.
+
+  // 2. Switch-Case Testi (Kesin Değer Kontrolü)
+  print("\n--- SWITCH-CASE SİSTEMİ ÇALIŞIYOR ---");
+  omurTavsiyesiVer(mevcutOmur); // 37 => Default (Özel Durum) çıkmalı.
+  omurTavsiyesiVer(10); // ZORUNLU PİT çıkmalı.
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+// Komut satırında çalıştırmak için: dart run lib/main.dart
 
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
+// ==========================================================
+// DART 2. GÜN BAŞLANGIÇ: NESNE YÖNELİMLİ PROGRAMLAMA (OOP)
+// Konu: Sınıflar (Class) ve Kurucu Metotlar (Constructor).
+// ==========================================================
+
+// 1. SINIF TANIMLAMA (Class): Nesnelerin (Objelerin) kalıbıdır.
+class LastikOOP {
+  // 2. ÖZELLİKLER (Properties / Üye Değişkenler): Nesnenin Verileri.
+  // Final kullanılarak, bu özelliklerin nesne yaratıldıktan sonra değişmeyeceği belirtilir.
+  final String ad;
+  final double basinc;
+  final int omur;
+
+  // 3. YAPICI METOT (Constructor): Nesne yaratıldığı anda çalışır ve zorunlu verileri alır.
+  // this.ozellikAdi kullanımı, gelen argümanı doğrudan sınıfın özelliğine atar.
+  // Bu, kod yazımını kısaltan Dart'a özgü bir kolaylıktır.
+  LastikOOP(this.ad, this.basinc, this.omur);
+
+  // 4. METOTLAR (Methods): Nesnenin Davranışları (Aksiyonları).
+  // Bu metot, If-Else yapısını kullanarak sadece kendi nesnesinin verisini kontrol eder.
+  void durumuGoster() {
+    print("\n--- ${ad} Nesnesi Detaylı Analiz ---");
+    print("Basınç: ${basinc} PSI | Ömür: ${omur}%");
+
+    // If-Else, Sınıf Metodu içinde kullanılarak Kapsülleme (Encapsulation) sağlanır.
+    if (basinc < 28.0) {
+      print("!!! KRİTİK UYARI: Basınç DÜŞÜK! Acil Dolum Gerekli.");
+    } else {
+      print("Durum: OK. Basınç İdeal Sınırda.");
+    }
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+// ----------------------------------------------------------
+// main() Fonksiyonunda Kullanım
+// ----------------------------------------------------------
+void main() {
+  // ... (Dart 1. Gün Çağrıları burada devam ediyor.)
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
+  print("\n\n=============== DART 2. GÜN: OOP ÇAĞRILARI ===============");
 
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
+  // 1. NESNE OLUŞTURMA: Constructor'ı kullanarak nesneyi zorunlu verilerle oluşturuyoruz.
+  // Eğer bu 3 değeri vermezsek, program hata verir (Type Safety).
+  LastikOOP onSol = LastikOOP("Sol Ön", 27.5, 45); // Kritik Basınç
+  LastikOOP sagArka = LastikOOP("Sağ Arka", 32.0, 80); // İdeal Basınç
 
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
-  }
+  // 2. METOT ÇALIŞTIRMA: Her nesne, kendi verisiyle durumuGoster metodunu çalıştırır.
+  onSol.durumuGoster(); // Sol Ön (27.5) için DÜŞÜK uyarısı vermeli.
+  sagArka.durumuGoster(); // Sağ Arka (32.0) için OK çıktısı vermeli.
 }
