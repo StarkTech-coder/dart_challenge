@@ -163,3 +163,123 @@ void main() {
   onSol.durumuGoster(); // Sol Ön (27.5) için DÜŞÜK uyarısı vermeli.
   sagArka.durumuGoster(); // Sağ Arka (32.0) için OK çıktısı vermeli.
 }
+
+class LastikOOP {
+  final String ad;
+  final double basinc;
+  final int omur;
+
+  // 1. Birinci Yapıcı (Varsayılan): Tüm verileri doğrudan alır.
+  LastikOOP(this.ad, this.basinc, this.omur);
+
+  // 2. İSİMLENDİRİLMİŞ YAPICI METOT: Veritabanından gelen Map tipindeki veriyi işlemek için.
+  // Kural: SınıfAdı.Yeniİsim() formatında tanımlanır.
+  LastikOOP.fromDatabase(Map<String, dynamic> veriMap)
+    // 'Initializing List' denir. Gövde çalışmadan önce atama yapılır.
+    : ad = veriMap['ad']!,
+      basinc = veriMap['basinc']!,
+      omur = veriMap['omur']! {
+    // Kurucu gövdesi: Nesne yaratılırken bir kez çalışacak ek işlemler (opsiyonel).
+    print("Veritabanından Gelen ${ad} Nesnesi Başarıyla Oluşturuldu.");
+  }
+
+  void durumuGoster() {
+    // ... (Metot içeriği aynı kalır)
+    print("\n--- ${ad} Nesnesi Detaylı Analiz ---");
+    print("Basınç: ${basinc} PSI | Ömür: ${omur}%");
+
+    if (basinc < 28.0) {
+      print("!!! KRİTİK UYARI: Basınç DÜŞÜK! Acil Dolum Gerekli.");
+    } else {
+      print("Durum: OK. Basınç İdeal Sınırda.");
+    }
+  }
+}
+
+// ----------------------------------------------------------
+// main() Fonksiyonunda Kullanım
+// ----------------------------------------------------------
+void main() {
+  // ... (Dart 1. ve 2. Gün Çağrılarım burada devam ediyor.)
+
+  print(
+    "\n\n=============== DART 2. GÜN: NAMED CONSTRUCTOR ÇAĞRILARI ===============",
+  );
+
+  // 1. Varsayılan Yapıcı ile Nesne Oluşturma (Sensör Verisi gibi)
+  LastikOOP onSolSensorden = LastikOOP("Sol Ön Sensör", 27.5, 45);
+  onSolSensorden.durumuGoster();
+
+  // 2. İsimlendirilmiş Yapıcı ile Nesne Oluşturma (Veritabanı Verisi gibi)
+  Map<String, dynamic> dbVerisi = {
+    'ad': 'Sağ Ön DB',
+    'basinc': 33.0,
+    'omur': 90,
+  };
+
+  LastikOOP sagOnDBden = LastikOOP.fromDatabase(dbVerisi);
+  sagOnDBden.durumuGoster();
+}
+
+// ==========================================================
+// DART 2. GÜN CHALLENGE: ADIM 5 (Opsiyonel Parametreler)
+// ==========================================================
+
+// Opsiyonel: Veri girişini zorunlu olmaktan çıkarıp esneklik kazandırma.
+class LastikAyari {
+  // Zorunlu Veri: Her lastiğin bir adı olmalıdır.
+  final String ad;
+
+  // Opsiyonel Veriler: Basınç ve omur bilinmeyebilir. Null Safety için '?' ve varsayılan değer kullanılır.
+  // Varsayılan değer (default value) atanarak null ihtimali azaltılır.
+  final double? basinc; // Null olabilir
+  final int omur = 100; // Varsayılan değer (Omur bilinmiyorsa %100 kabul et.)
+
+  // Yapıcı (Constructor): Süslü Parantez ({}) kullanmak, parametreleri OPSİYONEL ve İSİMLENDİRİLMİŞ yapar.
+  // Zorunlu (required) parametreler için 'required' anahtar kelimesi kullanılır (ad gibi).
+  LastikAyari({
+    required this.ad, // Bu parametre zorunlu (Adı olmayan lastik olmaz).
+    this.basinc, // Bu parametre opsiyonel (Basınç verisi gelmeyebilir).
+    int? omur, // Yerel omur değişkeni
+  }) : omur =
+           omur ??
+           100; // Null Kontrolü: Eğer omur gelmezse (null ise), 100 olarak ata.
+
+  void ozetiYazdir() {
+    print("\n--- Lastik Ayarı Özeti (${ad}) ---");
+
+    if (basinc == null) {
+      print("Basınç Durumu: Bilinmiyor. Kontrol Edilmeli.");
+    } else {
+      print("Basınç: ${basinc} PSI");
+    }
+
+    print("Ömür (%): ${omur}");
+  }
+}
+
+// ----------------------------------------------------------
+// main() Fonksiyonunda Kullanım
+// ----------------------------------------------------------
+void main() {
+  // ... (Önceki çağrılar burada devam ediyor.)
+
+  print(
+    "\n\n=============== DART 2. GÜN: OPSİYONEL PARAMETRELER ===============",
+  );
+
+  // 1. Tüm verileri girme (Sıra önemli değil, isimler önemli)
+  LastikAyari tamVerili = LastikAyari(
+    omur: 80,
+    ad: "Sağ Arka (Tam Veri)",
+    basinc: 30.5,
+  );
+  tamVerili.ozetiYazdir();
+
+  // 2. Eksik veri girme (Basınç'ı atladık)
+  LastikAyari eksikVerili = LastikAyari(
+    ad: "Sol Ön (Eksik Basınç)", // Ad zorunlu olduğu için girmek zorundayız.
+    omur: 50,
+  );
+  eksikVerili.ozetiYazdir(); // Basınç 'null' olduğu için uyarı verecek.
+}
